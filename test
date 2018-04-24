@@ -1,1 +1,137 @@
-请问
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!--
+
+-->
+<style type="text/css">
+.container{
+	width: 500px;
+	padding: 0px,15px;
+	margin: 0 auto;
+}
+.carousel{
+	width: 500px;
+	position: relative;
+	overflow: hidden;
+	border: 1px solid #f00;
+}
+.window{
+	height: 300px;
+	width: 500px;
+	position: relative;
+	overflow: hidden;
+}
+.img_reel{
+	position: absolute;
+}
+.img_reel img{
+	width: 500px;
+	float: left;
+}
+.paging{
+	position: absolute;
+	bottom: 15px;
+	right: 15px;
+}
+.paging a{
+	text-decoration: none;
+	color: #fff;
+	padding: 0px 5px;
+}
+/**
+.paging a:hover{
+	background: #920000;
+	font-weight: bold;
+}
+**/
+.paging a.active{
+	background: #920000;
+	font-weight: bold;
+}
+</style>
+  </head>
+  <body>
+	  <div class="container">
+			<div class="carousel">
+					<div class="window">
+						<div class="img_reel">
+							<a href="#"><img src="a1.jpg" alt=""></a>
+							<a href="#"><img src="a2.jpg" alt=""></a>
+							<a href="#"><img src="a3.jpg" alt=""></a>
+						</div>
+					</div>
+					<div class="paging">
+						<a href="#" rel="1" >1</a>
+						<a href="#" rel="2">2</a>
+						<a href="#" rel="3">3</a>
+					</div>
+			</div>
+	  </div>
+<script type="text/javascript">
+//设置第一个角标激活
+$(".paging").show();
+$('.paging a:first').addClass('active');
+// //window和img同宽  然后里面包一个div（img_reel），获取img数量，然后把img_reel的宽度设置为 window宽*ing数量
+var imgWidth=$('.window').width();
+var imgSum=$('.img_reel img').size();
+var imgReelWidth=imgWidth*imgSum;
+$('.img_reel').css({"width":imgReelWidth});
+rotate=function(end){
+	if(end){
+		var triggerID=imgSum-1;
+		var img_reelPosition=triggerID*imgWidth;
+
+		$('.paging a').removeClass('active');
+		$active.addClass('active');
+
+		$(".img_reel").animate({
+				left:-img_reelPosition
+			},500,function(){
+				$(this).css({"left":"0px"});
+			});
+	}else{
+		var triggerID=$active.attr("rel")-1;
+		var img_reelPosition=triggerID*imgWidth;
+	
+		$('.paging a').removeClass('active');
+		$active.addClass('active');
+		$(".img_reel").animate({
+			left:-img_reelPosition
+		},500);
+	}
+};
+var rotateSwitch=function(){
+	play=setInterval(function(){
+		$active=$('.paging a.active').next();
+		rel=$(".paging a.active").attr("rel");
+		document.title=rel;
+		if(rel==3){
+			$active=$(".paging a:first");
+			end=true;
+		}else{
+			end=false;
+		}
+		rotate(end);
+	},2000);
+};
+rotateSwitch();
+//悬停事件
+$('.img_reel a').hover(function(){
+clearInterval(play);
+},function(){
+	rotateSwitch();
+});
+//点击事件
+$('.paging a').click(function(){
+	$active= $(this);//
+	clearInterval(play);
+	rotate();
+	rotateSwitch();
+	return false;
+});
+</script>
+  </body>
+</html>
